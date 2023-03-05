@@ -21,6 +21,7 @@ namespace BuberDinner.Application.Authentication.Queries.Login
 
         public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery request, CancellationToken cancellationToken)
         {
+            await Task.CompletedTask;
             //check if user exist
             var user = _userRepository.GetUserByEmail(request.email);
             if (user is not User)

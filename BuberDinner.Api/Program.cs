@@ -1,3 +1,4 @@
+using BuberDinner.Api;
 using BuberDinner.Api.Common.Errors;
 using BuberDinner.Application;
 using BuberDinner.Infrastructure;
@@ -9,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<ProblemDetailsFactory, CustomProblemDetailsFactory>();
-builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
+builder.Services.AddPresintation().AddApplication().AddInfrastructure(builder.Configuration);
 var app = builder.Build();
 app.UseExceptionHandler("/errors");
 
