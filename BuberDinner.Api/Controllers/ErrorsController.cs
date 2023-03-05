@@ -10,7 +10,7 @@ namespace BuberDinner.Api.Controllers
         public IActionResult Error()
         {
             var exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
-            return Problem(title: exception?.Message, statusCode: 405);
+            return Problem(title: exception?.Message, statusCode: 500);
         }
     }
 }
