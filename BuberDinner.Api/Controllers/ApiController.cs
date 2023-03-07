@@ -2,6 +2,7 @@
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BuberDinner.Api.Controllers
 {
@@ -13,8 +14,19 @@ namespace BuberDinner.Api.Controllers
         protected IMediator? Mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetService<IMediator>());
         protected IActionResult Problem(List<Error> errors)
         {
+            if (errors == null || !errors.Any())
+                return Problem();
+
             HttpContext.Items[HttpContextItemKey.Errors] = errors;
+
+            if (errors.All(x => x.Type == ErrorType.Validation))
+                return ValidationProblem(errors);
             var firsError = errors[0];
+            return Problem(firsError);
+        }
+
+        private IActionResult Problem(Error firsError)
+        {
             var statusCode = firsError.Type switch
             {
                 ErrorType.NotFound => StatusCodes.Status404NotFound,
@@ -24,6 +36,14 @@ namespace BuberDinner.Api.Controllers
 
             };
             return Problem(statusCode: statusCode, title: firsError.Description);
+        }
+
+        private IActionResult ValidationProblem(List<Error> errors)
+        {
+            var modelStateDictionary = new ModelStateDictionary();
+            foreach (var error in errors)
+                modelStateDictionary.AddModelError(error.Code, error.Description);
+            return ValidationProblem(modelStateDictionary);
         }
     }
 }

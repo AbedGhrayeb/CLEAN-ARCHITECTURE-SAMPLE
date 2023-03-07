@@ -20,9 +20,9 @@ namespace BuberDinner.Api.Controllers
         public async Task<IActionResult> Register(RegisterRequest request)
         {
             var authResult = await Mediator.Send(_mapper.Map<RegisterCommand>(request));
-            var response = authResult.MatchFirst(authResult =>
+            var response = authResult.Match(authResult =>
                 Ok(_mapper.Map<AuthenticationResponse>(authResult)),
-                firstError => Problem(statusCode: StatusCodes.Status409Conflict, title: firstError.Description));
+                errors => Problem(errors));
 
             return Ok(response);
         }
