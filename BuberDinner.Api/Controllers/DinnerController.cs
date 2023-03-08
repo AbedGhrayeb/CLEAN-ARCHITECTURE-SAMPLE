@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
 
 namespace BuberDinner.Api.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     public class DinnerController : ApiController
     {
-        public IActionResult ListDinner() => Ok(Array.Empty<string>);
+        [HttpGet("")]
+        public IActionResult ListDinner() => Ok("empty list");
     }
 }
