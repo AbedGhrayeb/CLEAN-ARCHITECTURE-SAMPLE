@@ -1,4 +1,5 @@
 ﻿using BuberDinner.Domain.Common.Models;
+using BuberDinner.Domain.Common.ValueObjects;
 using BuberDinner.Domain.Dinner.ValueObjects;
 using BuberDinner.Domain.Host.ValueObjects;
 using BuberDinner.Domain.Menu.Entities;
@@ -12,7 +13,7 @@ namespace BuberDinner.Domain.Menu
         private readonly List<MenuSection> _sections = new();
         private readonly List<DinnerId> _dinnerIds = new();
         private readonly List<MenuReviewId> _menuReviweIds = new();
-        private Menu(MenuId menuId, string name, string description, DateTime createDateTime, DateTime updateDateTime, HostId hostId) : base(menuId)
+        private Menu(MenuId menuId, string name, string description, DateTime createDateTime, DateTime updateDateTime, HostId hostId, AverageRating averageRating) : base(menuId)
         {
             Name = name;
             Description = description;
@@ -21,14 +22,14 @@ namespace BuberDinner.Domain.Menu
             HostId = hostId;
         }
 
-        public static Menu Create(string name, string Description, HostId hostId)
+        public static Menu Create(string name, string Description, HostId hostId, AverageRating averageRating)
         {
-            return new Menu(MenuId.CreateUnique(), name, Description, DateTime.UtcNow, DateTime.UtcNow, hostId);
+            return new Menu(MenuId.CreateUnique(), name, Description, DateTime.UtcNow, DateTime.UtcNow, hostId, averageRating);
         }
 
         public string Name { get; }
         public string Description { get; }
-        public float AverageRating { get; }
+        public AverageRating AverageRating { get; }
         public DateTime CreateDateTime { get; }
         public DateTime UpdateDateTime { get; }
         public HostId HostId { get; }
